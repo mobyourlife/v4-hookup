@@ -4,6 +4,7 @@
   "description": "Publish messages to make it sync outdated websites and incoming webhooks.",
   "main": "index.js",
   "scripts": {
+    "start": "node index.js",
     "test": "standard"
   },
   "repository": {
@@ -30,5 +31,10 @@
   "homepage": "https://github.com/mobyourlife/v4-hookup#readme",
   "devDependencies": {
     "standard": "^6.0.8"
+  },
+  "dependencies": {
+    "bunyan": "^1.8.0",
+    "mob-api": "github:mobyourlife/v4-api",
+    "redis": "^2.5.3"
   }
 }

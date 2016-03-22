@@ -4,7 +4,7 @@
   "description": "Publish messages to make it sync outdated websites and incoming webhooks.",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "standard"
   },
   "repository": {
     "type": "git",
@@ -27,5 +27,8 @@
   "bugs": {
     "url": "https://github.com/mobyourlife/v4-hookup/issues"
   },
-  "homepage": "https://github.com/mobyourlife/v4-hookup#readme"
+  "homepage": "https://github.com/mobyourlife/v4-hookup#readme",
+  "devDependencies": {
+    "standard": "^6.0.8"
+  }
 }

@@ -1,5 +1,9 @@
 'use strict'
 
+// Set constants
+const TIME_OUTDATED = (10 * 60 * 1000)
+const CHANNEL_NAME = 'mob#facebook'
+
 // Load settings
 const info = require('../package')
 
@@ -28,37 +32,36 @@ loop()
 
 // Service loop
 function loop () {
-  outdatedAbout()
+  checkOutdated('about')
 
   setTimeout(loop, 60 * 1000)
 }
 
-// Publish messages about outdated fanpages about info
-function outdatedAbout () {
-  Site.find({
-    $or: [
-      { 'sources.facebook.fanpages.latestSync.about': { $exists: false } },
-      { 'sources.facebook.fanpages.latestSync.about': { $lt: new Date(Date.now() - 10 * 60 * 1000) } }
-    ]
-  }, {
-    'sources.facebook.fanpages._id': 1,
-    'sources.facebook.fanpages.latestSync.about': 1
-  }, (err, docs) => {
-    if (err) {
-      log.error(`Error finding outdated about fanpages! Message: ${err}.`)
-    } else {
-      let items = docs.map((i) => {
-        return {
-          type: 'about',
-          object_id: i.sources.facebook.fanpages[0]._id
-        }
-      })
+// Check if there's something outdated to publish
+function checkOutdated (type) {
+  let fieldName = `sources.facebook.fanpages.latestSync.${type}`
+  let latestTime = new Date(Date.now() - TIME_OUTDATED)
 
-      for (var i of items) {
-        let data = JSON.stringify(i)
-        client.publish('mob#facebook', data)
-        log.info(`Published message to mob#facebook: "${data}".`)
+  let exists = {}
+  exists[fieldName] = { $exists: false }
+
+  let outdated = {}
+  outdated[fieldName] = { $lt: latestTime }
+
+  let filters = {}
+  filters['sources.facebook.fanpages._id'] = 1
+  filters[fieldName] = 1
+
+  Site.find({ $or: [ exists, outdated ] }, filters, (err, docs) => {
+    docs.map((i) => {
+      return {
+        type: type,
+        object_id: i.sources.facebook.fanpages[0]._id
       }
-    }
+    }).forEach((i) => {
+      let data = JSON.stringify(i)
+      client.publish(CHANNEL_NAME, data)
+      log.info(`Published message to "${CHANNEL_NAME}: "${data}".`)
+    })
   })
 }

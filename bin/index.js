@@ -57,7 +57,7 @@ function outdatedAbout () {
       for (var i of items) {
         let data = JSON.stringify(i)
         client.publish('mob#facebook', data)
-        console.log(`Published message to mob#facebook: "${data}".`)
+        log.info(`Published message to mob#facebook: "${data}".`)
       }
     }
   })

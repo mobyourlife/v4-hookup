@@ -55,6 +55,7 @@ function checkOutdated (type) {
     'sources.facebook.fanpages._id': 1
   }
 
+  // Find outdated websites for the given field
   Site.find({ $or: [ exists, outdated ] }, select, (err, docs) => {
     docs.map((i) => {
       // Map outdated fanpages to the message format

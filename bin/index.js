@@ -60,8 +60,9 @@ function checkOutdated (type) {
     docs.map((i) => {
       // Map outdated fanpages to the message format
       return {
-        type: type,
-        object_id: i.sources.facebook.fanpages[0]._id
+        siteId: i._id,
+        objectId: i.sources.facebook.fanpages[0]._id,
+        type: type
       }
     }).forEach((i) => {
       // Publish each message to the proper Redis channel

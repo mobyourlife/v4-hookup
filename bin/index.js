@@ -33,6 +33,7 @@ loop()
 // Service loop
 function loop () {
   checkOutdated('about')
+  checkOutdated('posts')
 
   setTimeout(loop, 60 * 1000)
 }
